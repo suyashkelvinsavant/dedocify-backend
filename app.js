@@ -18,7 +18,7 @@ import pinataSDK from'@pinata/sdk';
 const port = process.env.PORT || 5000
 const pinata_api = process.env.PINATA_API_KEY
 const pinata_secret = process.env.PINATA_API_SECRET
-const pinata = pinataSDK("d9cf89635815aa8e7ffa", "17d1ee72aeec0ee7a24cbf493ca99bb3511b88cb79bffe8ce369fe8be513107b");
+const pinata = pinataSDK(pinata_api, pinata_secret);
 const pinata_gateway = "https://gateway.pinata.cloud/ipfs/"
 
 function getHead() {
