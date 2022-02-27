@@ -4,8 +4,12 @@ import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
 import sha512 from'crypto-js/sha512.js';
 import { ethers } from"ethers";
+import path from "path";
+import {fileURLToPath} from 'url';
 import fs from 'fs'
 const app = express()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors({ origin: /http:\/\/(127(\.\d){3}|localhost)/ }));
@@ -69,6 +73,10 @@ async function verifyUser(sign, hash, address, data) {
     }
 }
 
+app.use(express.static(path.join(__dirname,'build')));
+app.get('/',function(req, res){
+    res.sendFile(path.join(__dirname,'build','index.html'))
+})
 
 app.get('/api', async (req, res) => {
     if (typeof req.query.address !== 'undefined') { 

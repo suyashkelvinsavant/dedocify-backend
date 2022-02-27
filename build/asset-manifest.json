@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.3e6ee023.css",
+    "main.js": "/static/js/main.f0d71e80.js",
+    "static/js/787.9bcda6bd.chunk.js": "/static/js/787.9bcda6bd.chunk.js",
+    "static/media/hireus.png": "/static/media/hireus.089f3557ff463d2cf78d.png",
+    "static/media/logo.png": "/static/media/logo.6a157cec21ba5964e707.png",
+    "static/media/bootstrap-icons.woff?": "/static/media/bootstrap-icons.c1d7432ee75fa194e499.woff",
+    "static/media/bootstrap-icons.woff2?": "/static/media/bootstrap-icons.a13b815539b49de48d23.woff2",
+    "static/media/Tanishq.jpg": "/static/media/Tanishq.11519870320536798a74.jpg",
+    "static/media/shuyash.png": "/static/media/shuyash.59beeac3404e8ec0ecd4.png",
+    "static/media/Vaibhav.jpg": "/static/media/Vaibhav.83dcaff67dc379113b61.jpg",
+    "static/media/sakshi.jpg": "/static/media/sakshi.4c30cb5ae3ff99f8fdb6.jpg",
+    "static/media/srashti.jpg": "/static/media/srashti.459ab17201788971b441.jpg",
+    "static/media/Saurabh.png": "/static/media/Saurabh.27805677b8c9017c5e97.png",
+    "index.html": "/index.html",
+    "main.3e6ee023.css.map": "/static/css/main.3e6ee023.css.map",
+    "main.f0d71e80.js.map": "/static/js/main.f0d71e80.js.map",
+    "787.9bcda6bd.chunk.js.map": "/static/js/787.9bcda6bd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3e6ee023.css",
+    "static/js/main.f0d71e80.js"
+  ]
+}
