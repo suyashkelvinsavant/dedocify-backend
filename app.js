@@ -71,7 +71,7 @@ async function verifyUser(sign, hash, address, data) {
 
 
 app.get('/api', async (req, res) => {
-    if (typeof req.query.address !== 'undefined') {
+    if (typeof req.query.address !== 'undefined') { 
         const address = req.query.address;
         const keyAddress = address.substring(1)
         const head = getHead();
@@ -93,9 +93,9 @@ app.get('/api', async (req, res) => {
         }
     }
 })
-console.log(getHead());
 app.post('/api', async (req, res) => {
     const requestData = req.body;
+    if(typeof requestData.share === 'undefined'){
     if (typeof requestData.address !== 'undefined' && typeof requestData.data !== 'undefined' && typeof requestData.filename !== 'undefined' && typeof requestData.hash !== 'undefined' && typeof requestData.key !== 'undefined' && typeof requestData.sign !== 'undefined') {
         const address = requestData.address
         const keyAddress = address.substring(1)
@@ -108,17 +108,15 @@ app.post('/api', async (req, res) => {
             if (checkKeyExists(keyAddress)) {
                 const three_result = await pinata.pinJSONToIPFS({ "filename": fileName, "data": data })
                 const head = getHead();
-                console.log(three_result.IpfsHash, three_result.PinSize, head)
                 
                 if (head === "") {
-                    const two_result = await pinata.pinJSONToIPFS({ "address": address, "key": key, files: [{ "filename": fileName, "id": three_result.IpfsHash }] });
+                    const two_result = await pinata.pinJSONToIPFS({ "address": address, "key": key, files: [{ "filename": fileName, "id": three_result.IpfsHash }],share: [] });
                     const one_result = await pinata.pinJSONToIPFS({ "level": "one", [keyAddress]: two_result.IpfsHash });
                     setHead(one_result.IpfsHash);
                     res.send({ "cid": two_result.IpfsHash })
                 } else {
                     const one_resp = await fetch(pinata_gateway + head)
                     const one_index = await one_resp.json()
-                    console.log(one_index)
                     if (typeof one_index[keyAddress] !== 'undefined') {
                         const two_resp = await fetch(pinata_gateway + one_index[keyAddress]) 
                         const two_index = await two_resp.json()
@@ -142,7 +140,67 @@ app.post('/api', async (req, res) => {
         } else {
             console.log("Authentication Failed")
         }
+    }}else{
+        console.log("hello 1")
+        if (typeof requestData.share !== 'undefined' && typeof requestData.address !== 'undefined' && typeof requestData.data !== 'undefined' && typeof requestData.filename !== 'undefined' && typeof requestData.hash !== 'undefined' && typeof requestData.key !== 'undefined' && typeof requestData.sign !== 'undefined'&& requestData.filename !== "") {
+            const address = requestData.address
+            const keyAddress = address.substring(1)
+            const sign = requestData.sign
+            const data = requestData.data
+            const fileName = requestData.filename
+            const hash = requestData.hash
+            const key = requestData.key
+            const share = requestData.share
+            if (verifyUser(sign, hash, address, data)) {
+                if (checkKeyExists(keyAddress)) {
+                    const three_result = await pinata.pinJSONToIPFS({ "filename": fileName, "data": data, "key": share })
+                    const head = getHead();
+                    
+                    if (head === "") {
+                        const two_result = await pinata.pinJSONToIPFS({ "address": address, "key": key, files: [], share: [{ "filename": fileName, "id": three_result.IpfsHash,"key": share }] });
+                        const one_result = await pinata.pinJSONToIPFS({ "level": "one", [keyAddress]: two_result.IpfsHash });
+                        setHead(one_result.IpfsHash);
+                        res.send({ "cid": three_result.IpfsHash })
+                    } else {
+                        const one_resp = await fetch(pinata_gateway + head)
+                        const one_index = await one_resp.json()
+                        if (typeof one_index[keyAddress] !== 'undefined') {
+                            const two_resp = await fetch(pinata_gateway + one_index[keyAddress]) 
+                            const two_index = await two_resp.json()
+                            if(typeof two_index.share !== 'undefined'){
+                            two_index.share.push({ "filename": fileName, "id": three_result.IpfsHash, "key": share })
+                            const modified_two_result = await pinata.pinJSONToIPFS(two_index)
+                            pinata.unpin(one_index[keyAddress])
+                            one_index[keyAddress] = modified_two_result.IpfsHash
+                            const modified_one_result = await pinata.pinJSONToIPFS(one_index)
+                            pinata.unpin(head)
+                            setHead(modified_one_result.IpfsHash)
+                            res.send({ "cid": three_result.IpfsHash })
+                            }else{
+                            two_index.share=[{ "filename": fileName, "id": three_result.IpfsHash, "key": share }]
+                            const modified_two_result = await pinata.pinJSONToIPFS(two_index)
+                            pinata.unpin(one_index[keyAddress])
+                            one_index[keyAddress] = modified_two_result.IpfsHash
+                            const modified_one_result = await pinata.pinJSONToIPFS(one_index)
+                            pinata.unpin(head)
+                            setHead(modified_one_result.IpfsHash)
+                            res.send({ "cid": three_result.IpfsHash })
+                            }
+                        } else {
+                            res.send({ "error": "address not defined" }) 
+                            console.log(err)
+                        }
+                    }
+    
+                } else {
+                    console.log('failed')
+                }
+            } else {
+                console.log("Authentication Failed")
+            }
+        }
     }
+    
 })
 
 app.listen(port, () => {
