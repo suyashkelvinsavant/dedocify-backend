@@ -3,7 +3,7 @@
   "name": "dedocify-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
@@ -18,8 +18,5 @@
     "ethers": "^5.5.4",
     "express": "^4.17.3",
     "node-fetch": "^3.2.0"
-  },
-  "devDependencies": {
-    "dotenv": "^16.0.1"
   }
 }
