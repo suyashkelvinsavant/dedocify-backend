@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'dedocify'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_86F9EF895407496DA95574D9AE6CFD6F }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1783E218289246FCA5D9BAE90E7E97E4 }}
           package: .
